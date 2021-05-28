@@ -43,3 +43,8 @@ I decided to keep it that way, as otherwise someone maybe works by accident with
 ### Build Options:
   - `--build-arg strip=true` strips the application to save space but with reduced debuggability.
   - different versions can be specified using the args `ghcup_version`, `ghc_version` and `haskell_stack_ubuntu_version`
+
+### "Inspiration"
+
+Most of this is shamelessly stolen from [the theia-cpp-docker](https://github.com/theia-ide/theia-apps/tree/master/theia-cpp-docker).
+Kudos for the nice work there. 
