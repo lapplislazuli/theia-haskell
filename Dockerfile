@@ -123,19 +123,33 @@ FROM common
 COPY --from=theia /home/theia /home/theia
 WORKDIR /home/theia
 
-# Haskell 
-
-#RUN curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
-RUN wget https://downloads.haskell.org/~ghcup/0.1.14.1/x86_64-linux-ghcup-0.1.14.1
-RUN mv x86_64-linux-ghcup-0.1.14.1 ghcup && chmod +x ghcup
-RUN ./ghcup install ghc 9.0.1
-
 RUN chmod g+rw /home && \
     mkdir -p /home/project && \
     chown -R theia:theia /home/theia && \
     chown -R theia:theia /home/project
 
 USER theia
+
+# Haskell 
+
+ARG ghcup_version=0.1.14.1
+ARG ghc_version=9.0.1
+ARG haskell_stack_ubuntu_version=1.5.1-1
+
+#RUN curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
+RUN wget https://downloads.haskell.org/~ghcup/${ghcup_version}/x86_64-linux-ghcup-${ghcup_version}
+RUN mv x86_64-linux-ghcup-${ghcup_version} ghcup && chmod +x ghcup
+RUN ./ghcup install ghc $ghc_version
+RUN ./ghcup set ghc $ghc_version
+RUN ./ghcup install cabal
+# Update the Path to find everything
+ENV PATH="/home/theia/.cabal/bin:/home/theia/.ghcup/bin:${PATH}"
+# Get Haskell Stack
+USER root
+RUN apt-get update && apt-get install haskell-stack=$haskell_stack_ubuntu_version -y
+RUN stack upgrade --binary-only
+USER theia
+
 EXPOSE 3000
 ENV SHELL=/bin/bash \
     THEIA_DEFAULT_PLUGINS=local-dir:/home/theia/plugins
