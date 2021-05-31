@@ -32,6 +32,8 @@ Build image using `latest` theia packages (Theia app not stripped)
 ```bash
 docker build --no-cache --build-arg version=latest -t theia-haskell:latest .
 ```
+## Windows Note: 
+I had issues building this container on windows - however using the prebuild container on Windows was fine. 
 
 ## Additional Information
 
@@ -43,6 +45,13 @@ I decided to keep it that way, as otherwise someone maybe works by accident with
 ### Build Options:
   - `--build-arg strip=true` strips the application to save space but with reduced debuggability.
   - different versions can be specified using the args `ghcup_version`, `ghc_version` and `haskell_stack_ubuntu_version`
+
+### Defaulted Versions
+
+At the time of this writing, GHC 9+ was not fully supported by all tools. 
+The basic input to the packages, if every tool is working, can be found under commit de8b69.
+
+If I oversleep updating it once all works on GHC 9+, please open an issue for me. 
 
 ### "Inspiration"
 
